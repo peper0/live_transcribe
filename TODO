@@ -1,0 +1,8 @@
+- osd
+- smart concatention: finding an overlapping part of the text
+- automatic detection of device
+- cli interface
+- publish on pypi
+- gui for live tuning and audio device selection
+- automatic tuning of to lower the latency
+- pass previous text as prompt
