@@ -1,8 +1,8 @@
 
 [tool.poetry]
 name = "live-transcribe"
-version = "0.1.0"
-description = "A live, real-time transcription of the audio based on OpenAI's Whisper API."
+version = "0.1.1"
+description = "Real-time audio transcription. Runs OpenAI's Whisper locally."
 authors = ["Tomasz Łakota <tomasz.lakota@gmail.com>"]
 license = "MIT"
 readme = "README.md"

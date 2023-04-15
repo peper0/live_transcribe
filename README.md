@@ -16,6 +16,15 @@ Just run:
 
     python -m live_transcribe
 
+or
+
+    live_transcribe
+
+If you want to transcribe from another audio device, than the default, use the `--device` option, e.g.:
+
+    live_transcribe --list-devices
+    live_transcribe --device "alsa_input.usb-046d_HD_Pro_Webcam_C920_8C0B5B0F-02.analog-stereo
+
 On the first usage, the OpenAI's Whisper model will be downloaded and cached.
 
 See `live_transcribe --help` for options.
