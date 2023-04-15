@@ -1,6 +1,7 @@
 Live Transcribe
 
-Live Transcribe is a Python package that provides live, real-time transcription of audio based on OpenAI's Whisper API.
+Live Transcribe is a Python package that provides live, real-time transcription based on OpenAI's Whisper. Works
+offline.
 
 Currently, Live Transcribe supports only PulseAudio as an audio backend.
 
