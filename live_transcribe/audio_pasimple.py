@@ -16,7 +16,8 @@ class PaSimpleCapture:
         if format not in self.NP_TO_PA_FORMAT:
             raise ValueError(f"Unsupported format: {format}; supported formats: {self.NP_TO_PA_FORMAT.keys()}")
         pa_format = self.NP_TO_PA_FORMAT[format]
-        self._pa = pasimple.PaSimple(pasimple.PA_STREAM_RECORD, pa_format, 1, rate, device_name=device_name)
+        self._pa = pasimple.PaSimple(pasimple.PA_STREAM_RECORD, pa_format, 1, rate, device_name=device_name,
+                                     app_name="live_transcribe")
         self._pa2: Optional[pasimple] = None
         self._chunk_size_bytes: int = rate // 256 * pasimple.format2width(pa_format)  # 1/256 s of latency
         self._stop = False

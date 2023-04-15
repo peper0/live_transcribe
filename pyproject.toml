@@ -1,7 +1,8 @@
+
 [tool.poetry]
-name = "live_transcribe"
+name = "live-transcribe"
 version = "0.1.0"
-description = "A live, real-time transcription of the audio based on OpenAI's Whisper API.
+description = "A live, real-time transcription of the audio based on OpenAI's Whisper API."
 authors = ["Tomasz Łakota <tomasz.lakota@gmail.com>"]
 license = "MIT"
 readme = "README.md"
@@ -9,11 +10,15 @@ packages = [{ include = "live_transcribe" }]
 
 [tool.poetry.dependencies]
 python = "^3.8"
+numpy = "^1.23,!=1.24.0,!=1.24.1,!=1.24.2"
 openai-whisper = "^20230314"
 pasimple = "^0.0.1"
-numpy = "^1.24.2"
+pulsectl = "^22.3.2"
 
+[tool.poetry.scripts]
+live-transcribe = "live_transcribe:__main__"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+

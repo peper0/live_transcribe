@@ -14,10 +14,6 @@ Currently, Live Transcribe supports only PulseAudio as an audio backend.
 
 Just run:
 
-    live_transcribe
-
-or
-
     python -m live_transcribe
 
 On the first usage, the OpenAI's Whisper model will be downloaded and cached.
