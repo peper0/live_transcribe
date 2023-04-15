@@ -1,27 +1,30 @@
+from typing import Iterable, Sequence
+
 import numpy as np
 
-def merge_strings(first_seq, second_seq):
+
+def merge_sequences(first_seq, second_seq):
     """
     Merge two overlapping strings.
     :param first_seq:
     :param second_seq:
     :return:
 
-    >>> merge_strings("one two three fourx ", "three four five six seven")
+    >>> merge_sequences("one two three fourx ", "three four five six seven")
     'one two three four five six seven'
-    >>> merge_strings("aaa", "bbb")
+    >>> merge_sequences("aaa", "bbb")
     'aaabbb'
-    >>> merge_strings("aaa", "aa")
+    >>> merge_sequences("aaa", "aa")
     'aaa'
-    >>> merge_strings("aa", "")
+    >>> merge_sequences("aa", "")
     'aa'
-    >>> merge_strings("", "aa")
+    >>> merge_sequences("", "aa")
     'aa'
-    >>> merge_strings("", "")
+    >>> merge_sequences("", "")
     ''
-    >>> merge_strings("aabbaa", "aaccaa")
+    >>> merge_sequences("aabbaa", "aaccaa")
     'aabbaaccaa'
-    >>> merge_strings(["aa", "bb"], ["bb", "cc"])
+    >>> merge_sequences(["aa", "bb"], ["bb", "cc"])
     ['aa', 'bb', 'cc']
     """
     DEC_FIRST = 0
@@ -92,16 +95,67 @@ def merge_strings(first_seq, second_seq):
             else:
                 return prev + letter
 
-
     res = backtrack(len(first_seq), len(second_seq))
     if res is None:
         res = type(first_seq)()
     return res
 
 
+def merge_texts(text1: str, text2: str) -> str:
+    DELIMITER = " "
+    return DELIMITER.join(merge_sequences(text1.split(DELIMITER), text2.split(DELIMITER)))
+
+
+def common_prefix_len(a: Sequence, b: Sequence) -> int:
+    for i, (x, y) in enumerate(zip(a, b)):
+        if x != y:
+            return i
+    return min(len(a), len(b))
+
+
+Delta = str  # a string to append that may contain backspaces
+BACKSPACE_CHARACTER: str = "\x08"
+
+
+def compute_delta(base: str, new: str) -> Delta:
+    """
+    >>> compute_delta("hello", "hell")
+    '\\x08'
+    >>> compute_delta("hello", "hello world")
+    ' world'
+    >>> compute_delta("hello xyz", "hello world")
+    '\\x08\\x08\\x08 world'
+    >>> compute_delta("hello", "hello")
+    ''
+    """
+    cpl = common_prefix_len(base, new)
+    return BACKSPACE_CHARACTER * (len(base) - cpl) + new[cpl:]
+
+
+def apply_delta(s1: str, diff: Delta) -> str:
+    """
+    >>> apply_delta("hello", "\\x08")
+    'hell'
+    >>> apply_delta("hello", " world")
+    'hello world'
+    >>> apply_delta("hello xyz", "\\x08\\x08\\x08world")
+    'hello world'
+    >>> apply_delta("hello", "")
+    'hello'
+    """
+    res = s1
+    for c in diff:
+        if c == BACKSPACE_CHARACTER:
+            res = res[:-1]
+        else:
+            res += c
+    return res
+
+
 def split_into_lines(text: str, max_line_length: int):
     """
     Split text into lines of max_line_length characters.
+
     :param text:
     :param max_line_length:
     :return:
@@ -126,3 +180,25 @@ def split_into_lines(text: str, max_line_length: int):
     if line:
         lines.append(line)
     return lines
+
+
+def split_into_lines_live(deltas_generator: Iterable[Delta], preferred_line_length: int, max_line_length: int):
+    """
+    When the last line is longer than max_line_length, split out the "preffered_line_length" part of it to another line.
+    >>>  list(split_into_lines_live(["one", " two", " three", " four", " five", " six", " seven"], 5, 10))
+    """
+    text = ""
+    for delta in deltas_generator:
+        prev_text = text
+        text = apply_delta(text, delta)
+        # print(f"delta={delta}, text={text}")
+        if len(text) < max_line_length:
+            yield delta
+        else:
+            lines = split_into_lines(text, preferred_line_length)
+            out_delta = compute_delta(prev_text, "\n".join(lines))
+            text = lines[-1]
+            yield out_delta
+
+
+list(split_into_lines_live(["one", " two", " three", " four", " five", " six", " seven"], 5, 10))
