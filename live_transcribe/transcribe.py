@@ -31,11 +31,13 @@ def rolling_transcribe(
         DEVICE = "cpu"
 
     model_name = model + ".en" if language == "en" else model
+    logging.info(f"Loading model {model_name}...")
     model = whisper.load_model(model_name, device=DEVICE)
     logging.debug(
         f"Model is {'multilingual' if model.is_multilingual else 'English-only'} "
         f"and has {sum(np.prod(p.shape) for p in model.parameters()):,} parameters."
     )
+    logging.info("Model loaded.")
 
     options = whisper.DecodingOptions(
         language=language,

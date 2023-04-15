@@ -1,8 +1,14 @@
-- osd
-- smart concatention: finding an overlapping part of the text
-- automatic detection of device
+MUST
+- selectable audio device
 - cli interface
 - publish on pypi
+
+SHOULD
+- automatic detection of device
+- display in window (option)
+- tune for cpu
+
+COULD
 - gui for live tuning and audio device selection
 - automatic tuning of to lower the latency
 - pass previous text as prompt
